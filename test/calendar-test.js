@@ -25,7 +25,7 @@ describe('Calendar', function() {
         error: 1,
         total: function() {
           return this.value + this.error;
-        }
+        },
       };
 
       meeting = new Meeting(local, duration);
@@ -39,12 +39,12 @@ describe('Calendar', function() {
           location: 'Rua Diomedes Trota - Ramos',
           end: {
             dateTime: ISODateString(new Date('Fri Jun 10 2016 08:00:00 GMT-0300 (BRT)'))
-          }
+          },
         }, {
           location: 'Rua Diomedes Trota - Ramos',
           start: {
             dateTime: ISODateString(new Date('Fri Jun 10 2016 23:00:00 GMT-0300 (BRT)'))
-          }
+          },
         },
       ];
 
@@ -55,15 +55,3 @@ describe('Calendar', function() {
     });
   });
 });
-
-/* use a function for the exact format desired... */
-function ISODateString(d) {
-  function pad(n) {
-    return n < 10
-      ? '0' + n
-      : n;
-  }
-  return d.getUTCFullYear() + '-' + pad(d.getUTCMonth() + 1) + '-' + pad(d.getUTCDate()) + 'T' + pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + 'Z'
-}
-
-var d = new Date();

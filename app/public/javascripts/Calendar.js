@@ -34,14 +34,18 @@ Calendar.prototype.getStartPossibilities = function(meeting){
     var comeTime = travelTime[0];
     var goTime = travelTime[1];
 
-    var time = lastCommitment.start.end+comeTime+meeting.duration.total()+goTime;
+    // var time = lastCommitment.end.dateTime+comeTime+meeting.duration.total()+goTime;
 
-    while(time<=nextCommitment){
+    console.log(lastCommitment.end.dateTime);
 
-    }
+    // console.log(time);
+    //
+    // while(time<=nextCommitment.start.dateTime){
+    //
+    // }
 
 
-    return(data);
+    return([]);
   });
 
 };
