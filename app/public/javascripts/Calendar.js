@@ -22,7 +22,7 @@ Calendar.prototype.fetchGoogleData = function(url){
 
 
 Calendar.prototype.getStartPossibilities = function(meeting){
-  var self = this, startPossibilities = [];
+  var self = this, startPossibilities = [], startHour,lastStartHour;
 
   var lastCommitment = this.events[0];
   var nextCommitment = this.events[1];
@@ -31,21 +31,29 @@ Calendar.prototype.getStartPossibilities = function(meeting){
   var go = Direction.getTravelTime(meeting.local,nextCommitment.local);
 
   return Promise.all([come,go]).then(function(travelTime){
+    //time to get to the first commitment from client local
     var comeTime = travelTime[0];
+
+    //time to get to the last commitment
     var goTime = travelTime[1];
 
-    // var time = lastCommitment.end.dateTime+comeTime+meeting.duration.total()+goTime;
+    lastCommitment.end.hour = new Date(lastCommitment.end.dateTime).getHours();
+    nextCommitment.start.hour = new Date(nextCommitment.start.dateTime).getHours();
 
-    console.log(lastCommitment.end.dateTime);
+    var time = lastCommitment.end.hour+comeTime+meeting.duration.total()+goTime;
 
-    // console.log(time);
-    //
-    // while(time<=nextCommitment.start.dateTime){
-    //
-    // }
+    while(time<=nextCommitment.start.hour){
+      startHour  = time-(meeting.duration.total()+goTime);
+
+      if(startPossibilities.length===0 || 1<=(startHour-lastStartHour)){
+        startPossibilities.push(startHour);
+        lastStartHour = startHour;
+      }
+      time += 0.5;
+    }
 
 
-    return([]);
+    return(startPossibilities);
   });
 
 };

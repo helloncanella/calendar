@@ -32,26 +32,49 @@ describe('Calendar', function() {
 
     });
 
-    it('first test', function(done) {
+    it('test with two events in the same day', function(done) {
 
       calendar.events = [
         {
           location: 'Rua Diomedes Trota - Ramos',
           end: {
-            dateTime: ISODateString(new Date('Fri Jun 10 2016 08:00:00 GMT-0300 (BRT)'))
+            dateTime: new Date('Fri Jun 10 2016 08:00:00 GMT-0300 (BRT)').toISOString()
           },
         }, {
           location: 'Rua Diomedes Trota - Ramos',
           start: {
-            dateTime: ISODateString(new Date('Fri Jun 10 2016 23:00:00 GMT-0300 (BRT)'))
+            dateTime: new Date('Fri Jun 10 2016 23:00:00 GMT-0300 (BRT)').toISOString()
           },
         },
       ];
 
       calendar.getStartPossibilities(meeting).then(function(startPossibilities) {
-        expect(startPossibilities.length).toBe(19);
+        expect(startPossibilities.length).toBe(11);
         done();
       });
     });
+
+    it('test with two events in the same day', function(done) {
+
+      calendar.events = [
+        {
+          location: 'Rua Diomedes Trota - Ramos',
+          end: {
+            dateTime: new Date('Fri Jun 10 2016 08:00:00 GMT-0300 (BRT)').toISOString()
+          },
+        }, {
+          location: 'Rua Diomedes Trota - Ramos',
+          start: {
+            dateTime: new Date('Fri Jun 10 2016 23:00:00 GMT-0300 (BRT)').toISOString()
+          },
+        },
+      ];
+
+      calendar.getStartPossibilities(meeting).then(function(startPossibilities) {
+        expect(startPossibilities.length).toBe(11);
+        done();
+      });
+    });
+
   });
 });
