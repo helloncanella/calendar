@@ -48,6 +48,20 @@ Calendar.prototype.getStartPossibilities = function(meeting, allEvents) {
     lastCommitment;
 
   allEvents.forEach(function(dayEvents, day){
+    var startDay = {
+      end: {
+        dateTime:new Date(day).setHours(Day.start.hour, Day.start.minute)
+      }
+    };
+
+    var endDay = {
+      start:{
+        dateTime: new Date(day).setHours(Day.end.hour, Day.end.minute)
+      }
+    };
+
+    dayEvents = [].concat(startDay, dayEvents, endDay);
+
     dayEvents.forEach(function(event, index) {
       if (!lastCommitment) {
         lastCommitment = event;
@@ -84,6 +98,8 @@ Calendar.prototype.getStartPossibilities = function(meeting, allEvents) {
 
 
 };
+
+
 function getTask(day, lastCommitment, nextCommitment, meeting) {
   return new Promise(function(resolve, reject) {
 

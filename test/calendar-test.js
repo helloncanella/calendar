@@ -117,19 +117,7 @@ describe('Calendar', function() {
 
     it('test with two events in the same day', function(done) {
 
-      allEvents.set(new Date("2016-06-10T11:00:00.000Z").toDateString(), [
-        {
-          location: 'Rua Diomedes Trota - Ramos',
-          end: {
-            dateTime: new Date('Fri Jun 10 2016 08:00:00 GMT-0300 (BRT)').toISOString()
-          },
-        }, {
-          location: 'Rua Diomedes Trota - Ramos',
-          start: {
-            dateTime: new Date('Fri Jun 10 2016 23:00:00 GMT-0300 (BRT)').toISOString()
-          },
-        },
-      ]);
+      allEvents.set(new Date("2016-06-10T11:00:00.000Z").toDateString(), []);
 
       calendar.getStartPossibilities(meeting, allEvents).then(function(map) {
         var starPossibilities = map.get(new Date("2016-06-10T11:00:00.000Z").toDateString());
@@ -143,11 +131,6 @@ describe('Calendar', function() {
 
       allEvents.set(new Date("2016-06-10T11:00:00.000Z").toDateString(), [
         {
-          location: 'I',
-          end: {
-            dateTime: new Date('Fri Jun 10 2016 08:00:00 GMT-0300 (BRT)').toISOString()
-          },
-        }, {
           location: 'II',
           start: {
             dateTime: new Date('Fri Jun 10 2016 15:00:00 GMT-0300 (BRT)').toISOString()
@@ -155,12 +138,7 @@ describe('Calendar', function() {
           end: {
             dateTime: new Date('Fri Jun 10 2016 17:00:00 GMT-0300 (BRT)').toISOString()
           },
-        }, {
-          location: 'III',
-          start: {
-            dateTime: new Date('Fri Jun 10 2016 23:00:00 GMT-0300 (BRT)').toISOString()
-          },
-        },
+        }
       ]);
 
       calendar.getStartPossibilities(meeting, allEvents).then(function(map) {

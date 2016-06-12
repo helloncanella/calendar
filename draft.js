@@ -1,39 +1,56 @@
-Calendar.prototype.getStartPossibilities = function(meeting){
+Calendar.prototype.getStartPossibilities = function(meeting, allEvents) {
 
-  var self = this, startPossibilities = [], startHour,lastStartHour;
+  var self = this,
+    tasks = [],
+    lastCommitment;
 
-  var lastCommitment = this.events[0];
-  var nextCommitment = this.events[1];
+  allEvents.forEach(function(dayEvents, day){
+    dayEvents.forEach(function(event, index) {
+      if (!lastCommitment) {
+        lastCommitment = event;
+      } else {
+        var nextCommitment = event;
 
-  var come = Direction.getTravelTime(lastCommitment.local, meeting.local);
-  var go = Direction.getTravelTime(meeting.local,nextCommitment.local);
+        tasks.push(getTask(day,lastCommitment, nextCommitment, meeting));
 
-  return Promise.all([come,go]).then(function(travelTime){
-    //time to get to the first commitment from client local
-    var comeTime = travelTime[0];
-
-    //time to get to the last commitment
-    var goTime = travelTime[1];
-
-    lastCommitment.end.hour = new Date(lastCommitment.end.dateTime).getHours();
-    nextCommitment.start.hour = new Date(nextCommitment.start.dateTime).getHours();
-
-    var time = lastCommitment.end.hour+comeTime+meeting.duration.total()+goTime;
-
-    while(time<=nextCommitment.start.hour){
-      startHour  = time-(meeting.duration.total()+goTime);
-
-      if(startPossibilities.length===0 || 1<=(startHour-lastStartHour)){
-        startPossibilities.push(startHour);
-
-        console.log(startHour);
-        lastStartHour = startHour;
+        lastCommitment = event;
       }
-      time += 0.5;
-    }
-
-
-    return(startPossibilities);
+    }, self);
   });
 
+  return Promise.all(tasks).then(function(daysStartPossibilities) {
+
+    var allStartPossibilities = new Map();
+
+    daysStartPossibilities.forEach(function(object){
+      var day = object.day;
+      var startPossibilities = object.startPossibilities;
+
+      if(!allStartPossibilities.get(day)){
+        allStartPossibilities.set(day,startPossibilities);
+      }else{
+        var array = allStartPossibilities.get(day);
+        var merged = array.concat(startPossibilities);
+
+        allStartPossibilities.set(day,merged);
+      }
+    });
+
+    return allStartPossibilities;
+  });
+
+
+};
+
+
+lastCommitment = {
+  end: {
+    dateTime:new Date(day).setHours(Day.start.hour, Day.start.minute)
+  }
+};
+
+nextCommitment = {
+  start:{
+    dateTime: new Date(day).setHours(Day.end.hour, Day.end.minute)
+  }
 };
