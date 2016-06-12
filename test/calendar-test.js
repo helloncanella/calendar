@@ -40,7 +40,7 @@ describe('Calendar', function() {
       ];
 
 
-      Calendar.prototype.getGoogleData = function() {
+      Calendar.prototype.getGoogleCalendarData = function() {
         return new Promise(function(resolve, reject){
           resolve(dummyData);
         });
@@ -59,7 +59,7 @@ describe('Calendar', function() {
         firstDay = new Date('Fri Jun 11 2016 15:00:00 GMT-0300 (BRT)').toDateString();
         secondDay = new Date('Fri Jun 12 2016 15:00:00 GMT-0300 (BRT)').toDateString();
 
-        calendar.getGoogleData().then(function(data){
+        calendar.getGoogleCalendarData().then(function(data){
           organized = calendar.organizeGoogleData(data);
           done();
         });

@@ -5,9 +5,10 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     block content
-    script(src="/javascripts/Calendar.js")
+    script(src="/vendors/angular/angular.min.js")
+    script(src="/library/Calendar.js")
     script.
       var calendar = new Calendar();  
-      console.log(calendar.fetchGoogleData().then(function(data){
-        console.log(data);
-      }));
+      calendar.getGoogleCalendarData().then(function(data){
+        console.log('AQUI',data);
+      });

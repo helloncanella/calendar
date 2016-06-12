@@ -17,7 +17,7 @@ module.exports = function(config) {
     files: [
       'app/public/vendors/lodash/dist/lodash.min.js',
       'test/*.js',
-      'app/public/javascripts/**/*.js'
+      'app/public/library/**/*.js',
     ],
 
 
