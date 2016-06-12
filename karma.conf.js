@@ -15,8 +15,9 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'app/public/vendors/lodash/dist/lodash.min.js',
       'test/*.js',
-      'app/public/**/*.js'
+      'app/public/javascripts/**/*.js'
     ],
 
 

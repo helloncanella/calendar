@@ -1,4 +1,4 @@
-function Meeting (local, duration) {
-  this.local = local;
+function Meeting (location, duration) {
+  this.location = location;
   this.duration = duration;
 }

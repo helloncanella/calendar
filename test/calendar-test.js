@@ -1,16 +1,18 @@
 describe('Calendar', function() {
   var calendar,
     data,
-    googleData;
+    googleData,
+    meeting;
 
-  describe('Testing arragenment system', function() {
+  beforeEach(function(){
+    calendar = new Calendar();
+  });
 
-    var local,
-      duration,
-      meeting;
+  describe('Testing arragenment system for the same day', function() {
+
+    var local, duration;
 
     beforeAll(function() {
-      calendar = new Calendar();
 
       Direction.getTravelTime = function() {
         return new Promise(function(resolve, reject) {
@@ -34,13 +36,14 @@ describe('Calendar', function() {
 
     it('test with two events in the same day', function(done) {
 
-      calendar.events = [
+      var events = [
         {
           location: 'Rua Diomedes Trota - Ramos',
           end: {
             dateTime: new Date('Fri Jun 10 2016 08:00:00 GMT-0300 (BRT)').toISOString()
           },
-        }, {
+        },
+        {
           location: 'Rua Diomedes Trota - Ramos',
           start: {
             dateTime: new Date('Fri Jun 10 2016 23:00:00 GMT-0300 (BRT)').toISOString()
@@ -48,33 +51,45 @@ describe('Calendar', function() {
         },
       ];
 
-      calendar.getStartPossibilities(meeting).then(function(startPossibilities) {
+      calendar.getStartPossibilities(meeting, events).then(function(startPossibilities) {
         expect(startPossibilities.length).toBe(11);
         done();
       });
     });
 
-    it('test with two events in the same day', function(done) {
+    it('test with three events in the same day', function(done) {
 
-      calendar.events = [
+      var events = [
         {
-          location: 'Rua Diomedes Trota - Ramos',
+          location: 'I',
           end: {
             dateTime: new Date('Fri Jun 10 2016 08:00:00 GMT-0300 (BRT)').toISOString()
           },
-        }, {
-          location: 'Rua Diomedes Trota - Ramos',
+        },
+        {
+          location: 'II',
+          start: {
+            dateTime: new Date('Fri Jun 10 2016 15:00:00 GMT-0300 (BRT)').toISOString()
+          },
+          end: {
+            dateTime: new Date('Fri Jun 10 2016 17:00:00 GMT-0300 (BRT)').toISOString()
+          },
+        },
+        {
+          location: 'III',
           start: {
             dateTime: new Date('Fri Jun 10 2016 23:00:00 GMT-0300 (BRT)').toISOString()
           },
         },
       ];
 
-      calendar.getStartPossibilities(meeting).then(function(startPossibilities) {
-        expect(startPossibilities.length).toBe(11);
+      calendar.getStartPossibilities(meeting, events).then(function(startPossibilities) {
+        expect(startPossibilities.length).toBe(5);
         done();
       });
     });
+
+
 
   });
 });
