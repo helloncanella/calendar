@@ -1,6 +1,6 @@
 function Calendar() {}
 
-Calendar.prototype.fetchGoogleData = function(url) {
+Calendar.prototype.getGoogleData = function(url) {
 
   return new Promise(function(resolve, reject) {
     var xhttp = new XMLHttpRequest();
@@ -21,6 +21,23 @@ Calendar.prototype.fetchGoogleData = function(url) {
 };
 
 
+Calendar.prototype.organizeGoogleData = function(data){
+
+  var organizedData = new Map();
+
+  data.forEach(function(item){
+    var key = new Date(item.start.dateTime).toDateString();
+
+    if(!organizedData.has(key)){
+      organizedData.set(key,[item]);
+    }else{
+      var merged = organizedData.get(key).concat(item);
+      organizedData.set(key, merged);
+    }
+  });
+
+  return organizedData;
+};
 
 
 
@@ -67,7 +84,6 @@ Calendar.prototype.getStartPossibilities = function(meeting, allEvents) {
 
 
 };
-
 function getTask(day, lastCommitment, nextCommitment, meeting) {
   return new Promise(function(resolve, reject) {
 
