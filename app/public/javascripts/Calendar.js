@@ -24,36 +24,51 @@ Calendar.prototype.fetchGoogleData = function(url) {
 
 
 
-Calendar.prototype.getStartPossibilities = function(meeting, events) {
+Calendar.prototype.getStartPossibilities = function(meeting, allEvents) {
 
   var self = this,
     tasks = [],
     lastCommitment;
 
+  allEvents.forEach(function(dayEvents, day){
+    dayEvents.forEach(function(event, index) {
+      if (!lastCommitment) {
+        lastCommitment = event;
+      } else {
+        var nextCommitment = event;
 
-  events.forEach(function(event, index) {
+        tasks.push(getTask(day,lastCommitment, nextCommitment, meeting));
 
-    if (!lastCommitment) {
-      lastCommitment = event;
-    } else {
-      var nextCommitment = event;
+        lastCommitment = event;
+      }
+    }, self);
+  });
 
-      tasks.push(getTask(lastCommitment, nextCommitment, meeting));
+  return Promise.all(tasks).then(function(daysStartPossibilities) {
 
-      lastCommitment = event;
-    }
-  }, self);
+    var allStartPossibilities = new Map();
 
-  return Promise.all(tasks).then(function(startArray) {
-    var merged = [].concat.apply([], startArray);
-    console.log(merged);
-    return merged;
+    daysStartPossibilities.forEach(function(object){
+      var day = object.day;
+      var startPossibilities = object.startPossibilities;
+
+      if(!allStartPossibilities.get(day)){
+        allStartPossibilities.set(day,startPossibilities);
+      }else{
+        var array = allStartPossibilities.get(day);
+        var merged = array.concat(startPossibilities);
+
+        allStartPossibilities.set(day,merged);
+      }
+    });
+
+    return allStartPossibilities;
   });
 
 
 };
 
-function getTask(lastCommitment, nextCommitment, meeting) {
+function getTask(day, lastCommitment, nextCommitment, meeting) {
   return new Promise(function(resolve, reject) {
 
     var
@@ -90,7 +105,7 @@ function getTask(lastCommitment, nextCommitment, meeting) {
         time += 0.5;
       }
 
-      resolve(startPossibilities);
+      resolve({'day':day,'startPossibilities':startPossibilities});
     });
   });
 }
