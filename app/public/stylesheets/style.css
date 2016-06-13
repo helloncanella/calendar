@@ -28,16 +28,14 @@
     .content .block p {
       margin: auto;
       color: white; }
+  .content .calendar {
+    position: relative;
+    padding: 3rem 0; }
 
 .loading {
+  margin-top: 2rem;
   text-align: center;
-  font-size: 2rem;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%); }
+  font-size: 2rem; }
   .loading .fa {
     font-size: 6rem; }
 

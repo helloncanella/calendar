@@ -12,40 +12,31 @@ angular.module('app', [])
 }])
 
 .controller('appController', ['$scope', '$http', 'Library', function($scope, $http, Library) {
+
     $scope.calendarEvents = new Map();
 
-    console.log($scope.calendarEvents);
-
     var calendar = new Library.calendar();
-    var direction = Library.direction;
 
     if($scope.calendarEvents.size === 0){
-      $scope.isLoading = true;
+      $scope.calendarIsLoading = true;
       calendar.getGoogleCalendarData().then(function(data){
         var calendarItems = JSON.parse(data).items;
         var organized = calendar.organizeGoogleData(calendarItems);
-        console.log(organized);
 
-        $scope.isLoading = false;
+        $scope.calendarIsLoading = false;
         $scope.$apply();
-        // return organized;
       });
-
-
-
 
     }
 
 
 
-
-    // var direction = new Library.direction();
-
-    $scope.addresses = [];
-
-    $scope.haveValidAdress = false;
+    $scope.sugestedAdresses = [];
+    $scope.chosenAddress = false;
 
     $scope.getAddress = function(input) {
+
+      $scope.chosenAddress = false;
 
       $http.get('./google/address', {
         params: {
@@ -54,33 +45,31 @@ angular.module('app', [])
       }).then(function(response) {
         var predictions = response.data.predictions;
 
-        if(predictions.length===0){
-          $scope.addresses = [];
-          $scope.haveValidAdress = false;
-        }else{
-          $scope.haveValidAdress = true;
-        }
-
         predictions.forEach(function(content, index) {
-          $scope.addresses[index] = content.description;
+          $scope.sugestedAdresses[index] = content.description;
         });
 
       });
 
     };
 
-    $scope.calculateTravelTime = function(){
-      if(!$scope.haveValidAdress){alert('hello');}
-      else{
-        var origin = 'Rua Diomedes Trota, 349';
-        var destiny = $scope.address;
+    $scope.calculatingAvailability = true;
 
-        direction.getTravelTime(origin, destiny).then(function(timeValue){
-          console.log(parseFloat(timeValue));
-        }).catch(function(error){
-          console.log(error);
-        });
-      }
+    $scope.calculateTravelTime = function(destiny){
+
+
+      var direction = Library.direction;
+
+      var origin = 'Rua Diomedes Trota, 349';
+      $scope.address = destiny;
+      $scope.chosenAddress = true;
+      $scope.sugestedAdresses = [];
+
+      direction.getTravelTime(origin, destiny).then(function(timeValue){
+        console.log(parseFloat(timeValue));
+      }).catch(function(error){
+        console.log(error);
+      });
     };
   },
 ]);

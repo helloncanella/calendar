@@ -1,13 +1,10 @@
 .loading{
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 2rem;
   .fa{
     font-size:6rem;
   }
-  text-align: center;
-  font-size: 2rem;
-  position: absolute;
-  top:50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
 }
 
 .spin{
