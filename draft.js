@@ -1,4 +1,4 @@
-Calendar.prototype.getStartPossibilities = function(meeting, allEvents) {
+Calendar.prototype.getClassPossibilities = function(meeting, allEvents) {
 
   var self = this,
     tasks = [],

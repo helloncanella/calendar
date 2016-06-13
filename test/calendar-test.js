@@ -115,19 +115,19 @@ describe('Calendar', function() {
 
     });
 
-    it('test with two events in the same day', function(done) {
+    it('test with no events in the same day', function(done) {
 
       allEvents.set(new Date("2016-06-10T11:00:00.000Z").toDateString(), []);
 
-      calendar.getStartPossibilities(meeting, allEvents).then(function(map) {
-        var starPossibilities = map.get(new Date("2016-06-10T11:00:00.000Z").toDateString());
+      calendar.getClassPossibilities(meeting, allEvents).then(function(map) {
+        var classPossibilities = map.get(new Date("2016-06-10T11:00:00.000Z").toDateString());
 
-        expect(starPossibilities.length).toBe(11);
+        expect(classPossibilities.length).toBe(11);
         done();
       });
     });
 
-    it('test with three events in the same day', function(done) {
+    it('test with one in the same day', function(done) {
 
       allEvents.set(new Date("2016-06-10T11:00:00.000Z").toDateString(), [
         {
@@ -141,12 +141,40 @@ describe('Calendar', function() {
         }
       ]);
 
-      calendar.getStartPossibilities(meeting, allEvents).then(function(map) {
-        var starPossibilities = map.get(new Date("2016-06-10T11:00:00.000Z").toDateString());
+      calendar.getClassPossibilities(meeting, allEvents).then(function(map) {
+        var classPossibilities = map.get(new Date("2016-06-10T11:00:00.000Z").toDateString());
 
-        expect(starPossibilities.length).toBe(5);
+        expect(classPossibilities.length).toBe(5);
         done();
       });
     });
+
+    it('star', function(done) {
+
+      allEvents.set(new Date("2016-06-10T11:00:00.000Z").toDateString(), [
+        {
+          location: 'II',
+          start: {
+            dateTime: new Date('Fri Jun 10 2016 15:00:00 GMT-0300 (BRT)').toISOString()
+          },
+          end: {
+            dateTime: new Date('Fri Jun 10 2016 17:00:00 GMT-0300 (BRT)').toISOString()
+          },
+        }
+      ]);
+
+      calendar.getClassPossibilities(meeting, allEvents).then(function(map) {
+        var classPossibilities = map.get(new Date("2016-06-10T11:00:00.000Z").toDateString());
+
+        classPossibilities.forEach(function(possibility){
+          expect(possibility.hasOwnProperty('start')).toBeTruthy();
+          expect(possibility.hasOwnProperty('end')).toBeTruthy();
+        });
+
+        done();
+      });
+    });
+
+
   });
 });

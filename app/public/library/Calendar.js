@@ -40,7 +40,7 @@ Calendar.prototype.organizeGoogleData = function(data){
 
 
 
-Calendar.prototype.getStartPossibilities = function(meeting, allEvents) {
+Calendar.prototype.getClassPossibilities = function(meeting, allEvents) {
 
   var self = this,
     tasks = [],
@@ -82,13 +82,13 @@ Calendar.prototype.getStartPossibilities = function(meeting, allEvents) {
 
     daysStartPossibilities.forEach(function(object){
       var day = object.day;
-      var startPossibilities = object.startPossibilities;
+      var classPossibilities = object.classPossibilities;
 
       if(!allStartPossibilities.get(day)){
-        allStartPossibilities.set(day,startPossibilities);
+        allStartPossibilities.set(day,classPossibilities);
       }else{
         var array = allStartPossibilities.get(day);
-        var merged = array.concat(startPossibilities);
+        var merged = array.concat(classPossibilities);
 
         allStartPossibilities.set(day,merged);
       }
@@ -105,7 +105,7 @@ function getTask(day, lastCommitment, nextCommitment, meeting) {
   return new Promise(function(resolve, reject) {
 
     var
-      startPossibilities = [],
+      classPossibilities = [],
       startHour,
       lastStartHour;
 
@@ -130,15 +130,15 @@ function getTask(day, lastCommitment, nextCommitment, meeting) {
       while (time <= nextCommitment.start.hour) {
         startHour = time - (meeting.duration.total() + goTime);
 
-        if (startPossibilities.length === 0 || 1 <= (startHour - lastStartHour)) {
-          startPossibilities.push(startHour);
+        if (classPossibilities.length === 0 || 1 <= (startHour - lastStartHour)) {
+          classPossibilities.push({start:startHour, end:startHour+meeting.duration.value});
           lastStartHour = startHour;
         }
 
         time += 0.5;
       }
 
-      resolve({'day':day,'startPossibilities':startPossibilities});
+      resolve({'day':day,'classPossibilities':classPossibilities});
     });
   });
 }

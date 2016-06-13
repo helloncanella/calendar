@@ -9,7 +9,7 @@ block content
     .wrapper(ng-show="!calendarIsLoading")  
       input.location(placeholder="location" ng-model="address" ng-change="getAddress(address)")
       .adresses(
-        ng-click="calculateTravelTime(sugestedAdresses[$index])" 
+        ng-click="calculateAvailability(sugestedAdresses[$index])" 
         ng-repeat="address in sugestedAdresses track by $index"
       ){{sugestedAdresses[$index]}} 
       .calendar(ng-show="chosenAddress")

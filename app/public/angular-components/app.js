@@ -1,35 +1,40 @@
-angular.module('app', [])
+angular.module('app', ['ngLocale']).factory('Library', [
+  '$window',
+  function($window) {
+    return {calendar: $window.Calendar, direction: $window.Direction, classInformation: $window.classInformation,};
+  },
+]).factory('Direction', [
+  '$window',
+  function($window) {
+    return $window.Calendar;
+  },
+]).controller('appController', [
+  '$scope',
+  '$http',
+  'Library',
+  function($scope, $http, Library) {
 
-.factory('Library', ['$window',function($window){
-  return {
-    calendar : $window.Calendar,
-    direction : $window.Direction
-  };
-}])
-
-.factory('Direction', ['$window',function($window){
-  return $window.Calendar;
-}])
-
-.controller('appController', ['$scope', '$http', 'Library', function($scope, $http, Library) {
-
-    $scope.calendarEvents = new Map();
+    $scope.days = [];
 
     var calendar = new Library.calendar();
+    $scope.calendarEvents = new Map();
 
-    if($scope.calendarEvents.size === 0){
+
+
+    if ($scope.calendarEvents.size === 0) {
       $scope.calendarIsLoading = true;
-      calendar.getGoogleCalendarData().then(function(data){
+      calendar.getGoogleCalendarData().then(function(data) {
         var calendarItems = JSON.parse(data).items;
         var organized = calendar.organizeGoogleData(calendarItems);
 
         $scope.calendarIsLoading = false;
         $scope.$apply();
+
+        $scope.calendarEvents=organized;
+
       });
 
     }
-
-
 
     $scope.sugestedAdresses = [];
     $scope.chosenAddress = false;
@@ -55,21 +60,58 @@ angular.module('app', [])
 
     $scope.calculatingAvailability = true;
 
-    $scope.calculateTravelTime = function(destiny){
+    $scope.calculateAvailability = function(allEvents,meeting) {
 
+      return new Promise(function(resolve, reject){
+        var now = new Date();
 
-      var direction = Library.direction;
+        var today = {
+          year: now.getFullYear(),
+          month: now.getMonth(),
+          day: now.getUTCDate(),
+        };
 
-      var origin = 'Rua Diomedes Trota, 349';
-      $scope.address = destiny;
-      $scope.chosenAddress = true;
-      $scope.sugestedAdresses = [];
+        for (var i = 0; i < 14; i++) {
+          $scope.days[i] = new Date(today.year, today.month, today.day + i);
+          var dateString = $scope.days[i].toDateString();
 
-      direction.getTravelTime(origin, destiny).then(function(timeValue){
-        console.log(parseFloat(timeValue));
-      }).catch(function(error){
-        console.log(error);
+          if (!allEvents.has(dateString)) {
+            allEvents.set(dateString, []);
+          }
+
+        }
+
+        var classInfo = Library.classInformation;
+        var meeting = new Meeting($scope.address,classInfo.duration);
+
+        console.log(meeting, classInfo, allEvents);
+
+        calendar.getClassPossibilities(meeting, allEvents).then(function(classPossibilities) {
+          console(classPossibilities);
+        });
+
       });
+
+
+
+
     };
+
+    // $scope.calculateTravelTime = function(destiny){
+    //
+    //
+    //   var direction = Library.direction;
+    //
+    //   var origin = 'Rua Diomedes Trota, 349';
+    //   $scope.address = destiny;
+    //   $scope.chosenAddress = true;
+    //   $scope.sugestedAdresses = [];
+    //
+    //   direction.getTravelTime(origin, destiny).then(function(timeValue){
+    //     console.log(parseFloat(timeValue));
+    //   }).catch(function(error){
+    //     console.log(error);
+    //   });
+    // };
   },
 ]);
