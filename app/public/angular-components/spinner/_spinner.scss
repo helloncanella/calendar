@@ -1,0 +1,19 @@
+.loading{
+  .fa{
+    font-size:6rem;
+  }
+  text-align: center;
+  font-size: 2rem;
+  position: absolute;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.spin{
+  animation:spin 1s linear infinite;
+}
+
+@keyframes spin{
+  100%{transform: rotate(360deg)}
+}

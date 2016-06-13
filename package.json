@@ -16,11 +16,10 @@
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
+    "browser-sync": "^2.12.10",
     "gulp": "^3.9.1",
-    "gulp-nodemon": "^2.1.0",
     "gulp-autoprefixer": "^3.1.0",
     "gulp-load-plugins": "^1.2.4",
-    "browser-sync": "^2.12.10",  
     "gulp-nodemon": "^2.0.7",
     "gulp-sass": "^2.3.1",
     "gulp-sass-glob": "^1.0.6",
@@ -28,6 +27,7 @@
     "karma": "^0.13.22",
     "karma-chrome-launcher": "^1.0.1",
     "karma-jasmine": "^1.0.2",
-    "nodemon": "latest"
+    "nodemon": "latest",
+    "request": "^2.72.0"
   }
 }

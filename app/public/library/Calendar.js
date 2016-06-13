@@ -7,10 +7,9 @@ Calendar.prototype.getGoogleCalendarData = function(url) {
     var address = url || '/google/calendar';
 
     xhttp.onreadystatechange = function() {
-      console.log(xhttp);
 
-      if (xhttp.status == 200) {
-        resolve({status: 200, data: xhttp.response});
+      if (xhttp.status == 200 && xhttp.readyState == 4) {
+        resolve(xhttp.responseText);
       }
     };
 

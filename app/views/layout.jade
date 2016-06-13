@@ -2,13 +2,16 @@ doctype html
 html
   head
     title= title
+    link(rel='stylesheet', href='/vendors/font-awesome/css/font-awesome.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     block content
     script(src="/vendors/angular/angular.min.js")
     script(src="/library/Calendar.js")
-    script.
-      var calendar = new Calendar();  
-      calendar.getGoogleCalendarData().then(function(data){
-        console.log('AQUI',data);
-      });
+    script(src="/library/Direction.js")
+    script(src="/angular-components/app.js")
+    //- script.
+    //-   var calendar = new Calendar();  
+    //-   calendar.getGoogleCalendarData().then(function(data){
+    //-     console.log('AQUI',data);
+    //-   });

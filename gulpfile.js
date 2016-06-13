@@ -25,7 +25,7 @@ gulp.task('start', function() {
 
 gulp.task('sass', function() {
 
-  return gulp.src('./app/public/stylesheets/style.scss', {base: './app'}).pipe($.sassGlob()).pipe($.sass().on('error', $.sass.logError)).pipe($.autoprefixer({
+  return gulp.src('./app/public/stylesheets/style.scss', {base: '.'}).pipe($.sassGlob()).pipe($.sass().on('error', $.sass.logError)).pipe($.autoprefixer({
     // browsers: ['iOS > 7', 'ie >= 11', 'and_chr >= 2.3'],
     browsers: ['last 5 versions'],
     cascade: false,

@@ -1,8 +1,56 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
+.content {
+  width: 100vw; }
+  .content input {
+    width: 50vw;
+    height: 35px;
+    padding: 10px;
+    font-size: 1.5rem; }
+  .content ul {
+    margin-left: 0;
+    padding: 0; }
+  .content li {
+    display: inline-block;
+    font-size: 1.5rem;
+    margin-right: 10px;
+    cursor: pointer; }
+  .content .availability {
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex; }
+  .content .block {
+    width: 10vw;
+    height: 10vw;
+    background: black;
+    margin-right: 10px;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex; }
+    .content .block p {
+      margin: auto;
+      color: white; }
 
-a {
-  color: #00B7FF;
-}
+.loading {
+  text-align: center;
+  font-size: 2rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%); }
+  .loading .fa {
+    font-size: 6rem; }
+
+.spin {
+  -webkit-animation: spin 1s linear infinite;
+  animation: spin 1s linear infinite; }
+
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
+
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg); } }
