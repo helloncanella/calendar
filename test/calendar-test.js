@@ -119,8 +119,6 @@ describe('Calendar', function() {
 
       allEvents.set(new Date("2016-06-10T11:00:00.000Z").toDateString(), []);
 
-      console.log(allEvents.size);
-
       calendar.getClassPossibilities(meeting, allEvents).then(function(map) {
         var classPossibilities = map.get(new Date("2016-06-10T11:00:00.000Z").toDateString());
 
