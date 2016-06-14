@@ -11,6 +11,7 @@ block content
       .adresses(
         ng-click="calculateAvailability(sugestedAdresses[$index])" 
         ng-repeat="address in sugestedAdresses track by $index"
+        ng-show="!chosenAddress"  
       ){{sugestedAdresses[$index]}} 
       .calendar(ng-show="chosenAddress")
         .loading(ng-show="calculatingAvailability")

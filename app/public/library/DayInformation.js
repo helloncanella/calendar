@@ -1,4 +1,4 @@
-var Day  = {
+var DayInformation  = {
   start:{
     hour: 8,
     minute: 0,

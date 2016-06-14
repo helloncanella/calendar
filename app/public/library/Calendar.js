@@ -1,4 +1,6 @@
-function Calendar() {}
+function Calendar(dayInformation) {
+  this.dayInformation = dayInformation;
+}
 
 Calendar.prototype.getGoogleCalendarData = function(url) {
 
@@ -44,15 +46,18 @@ Calendar.prototype.getClassPossibilities = function(meeting, allEvents) {
 
   var self = this,
     tasks = [],
-    lastCommitment;
+    Day = this.dayInformation;
 
   allEvents.forEach(function(dayEvents, day){
+    var lastCommitment;
+
     var startDay = {
       location: Day.start.location,
       end: {
         dateTime:new Date(day).setHours(Day.start.hour, Day.start.minute)
       }
     };
+
 
     var endDay = {
       location: Day.end.location,
@@ -61,7 +66,9 @@ Calendar.prototype.getClassPossibilities = function(meeting, allEvents) {
       }
     };
 
+
     dayEvents = [].concat(startDay, dayEvents, endDay);
+
 
     dayEvents.forEach(function(event, index) {
       if (!lastCommitment) {
@@ -117,16 +124,15 @@ function getTask(day, lastCommitment, nextCommitment, meeting) {
     Promise.all([come, go,]).then(function(travelTime) {
 
       //time to get to the first commitment from client local
-      var comeTime = travelTime[0];
+      var comeTime = parseFloat(travelTime[0]);
 
       //time to get to the last commitment
-      var goTime = travelTime[1];
+      var goTime = parseFloat(travelTime[1]);
 
       nextCommitment.start.hour = new Date(nextCommitment.start.dateTime).getHours();
       lastCommitment.end.hour = new Date(lastCommitment.end.dateTime).getHours();
 
       var time = lastCommitment.end.hour + comeTime + meeting.duration.total() + goTime;
-
       while (time <= nextCommitment.start.hour) {
         startHour = time - (meeting.duration.total() + goTime);
 
@@ -137,6 +143,7 @@ function getTask(day, lastCommitment, nextCommitment, meeting) {
 
         time += 0.5;
       }
+
 
       resolve({'day':day,'classPossibilities':classPossibilities});
     });

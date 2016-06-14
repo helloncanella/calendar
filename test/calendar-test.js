@@ -6,7 +6,7 @@ describe('Calendar', function() {
     meeting;
 
   beforeEach(function() {
-    calendar = new Calendar();
+    calendar = new Calendar(DayInformation);
     allEvents = new Map();
   });
 
@@ -55,7 +55,7 @@ describe('Calendar', function() {
       var organized, calendar, firstDay, secondDay;
 
       beforeEach(function(done){
-        calendar = new Calendar();
+        calendar = new Calendar(DayInformation);
         firstDay = new Date('Fri Jun 11 2016 15:00:00 GMT-0300 (BRT)').toDateString();
         secondDay = new Date('Fri Jun 12 2016 15:00:00 GMT-0300 (BRT)').toDateString();
 
@@ -119,6 +119,8 @@ describe('Calendar', function() {
 
       allEvents.set(new Date("2016-06-10T11:00:00.000Z").toDateString(), []);
 
+      console.log(allEvents.size);
+
       calendar.getClassPossibilities(meeting, allEvents).then(function(map) {
         var classPossibilities = map.get(new Date("2016-06-10T11:00:00.000Z").toDateString());
 
@@ -140,6 +142,7 @@ describe('Calendar', function() {
           },
         }
       ]);
+
 
       calendar.getClassPossibilities(meeting, allEvents).then(function(map) {
         var classPossibilities = map.get(new Date("2016-06-10T11:00:00.000Z").toDateString());
