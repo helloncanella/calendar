@@ -15,10 +15,14 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'app/public/vendors/lodash/dist/lodash.min.js',
+      'app/public/vendors/angular/angular.min.js',
+      'app/public/vendors/angular-mocks/angular-mocks.js',
       'test/*.js',
       'app/public/library/**/*.js',
+      'app/public/angular-components/**/*.js',
     ],
+
+
 
 
     // list of files to exclude
@@ -35,7 +39,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['nyan'],
 
 
     // web server port
@@ -67,5 +71,5 @@ module.exports = function(config) {
     // Concurrency level
     // how many browser should be started simultaneous
     concurrency: Infinity
-  })
-}
+  });
+};
