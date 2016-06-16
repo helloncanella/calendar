@@ -7,7 +7,9 @@ describe('Scheduling class', function() {
 
   beforeEach(module('app'));
 
-  beforeEach(inject(function($controller, $rootScope, $window) {
+
+  beforeEach(inject(function($controller, $rootScope, $window,$httpBackend) {
+    http = $httpBackend;
     scope = $rootScope.$new();
     ctrl = $controller('appController', {$scope: scope});
     window = $window;
@@ -15,10 +17,6 @@ describe('Scheduling class', function() {
 
   describe('address finder', function() {
     var request;
-
-    beforeEach(inject(function($httpBackend) {
-      http = $httpBackend;
-    }));
 
     describe('suggestions', function() {
       it('not show if input is empty', function(done) {
@@ -51,10 +49,20 @@ describe('Scheduling class', function() {
 
         locationInput = window.encodeURI(locationInput).replace(/%20/g, "+");
 
-        if(locationInput){
-          response = {predictions:[{'description':''},{'description':''}]};
-        }else{
-          response = {predictions:[]};
+        if (locationInput) {
+          response = {
+            predictions: [
+              {
+                'description': ''
+              }, {
+                'description': ''
+              },
+            ]
+          };
+        } else {
+          response = {
+            predictions: []
+          };
         }
 
         response = JSON.stringify(response);
@@ -66,26 +74,27 @@ describe('Scheduling class', function() {
     describe('suggestions when clicked', function() {
       var address;
 
-      beforeEach(function(){
-        spyOn(scope,'calculateAvailability').and.callThrough();
+      beforeEach(function() {
+        spyOn(scope, 'calculateAvailability').and.callThrough();
         address = 'Rua das Marrecas';
-        scope.suggestions = ['','']; //simulate the existence of sugestions
-        scope.agendaIsLoading = false;
+        scope.suggestions = ['', '',]; //simulate the existence of sugestions
+        scope.calculatingAvailability = false;
         scope.selectAddress(address);
       });
 
-
       it('set chosen address', function() {
+        scope.selectAddress(address);
         expect(scope.chosenAddress).toBe(address);
       });
 
       it('it disapears', function() {
+        scope.selectAddress(address);
         expect(scope.suggestions.length).toBe(0);
       });
 
-      it('it triggers the agenda loading', function(done) {
+      it('it triggers the calculation of availability', function(done) {
+        expect(scope.calculatingAvailability).toBeTruthy();
         expect(scope.calculateAvailability).toHaveBeenCalled();
-        expect(scope.agendaIsLoading).toBeTruthy();
         done();
       });
     });
@@ -93,17 +102,36 @@ describe('Scheduling class', function() {
 
   describe('load spinner', function() {
     describe('agenda loader', function() {
-      it('works when the the calendar events isn\'t downloaded', function() {});
+      it('works when the the calendar events isn\'t downloaded', function() {
+        expect(scope.downloadingAgenda).toBeTruthy();
+      });
+      it('stops when the the calendar events is downloaded', function(done) {
+        http.when('GET','/agenda').respond(200,'{"items":[]}');
+
+        scope.donwnloadAgenda().then(function() {
+          expect(scope.downloadingAgenda).toBeFalsy();
+          done();
+        });
+
+        http.flush();
+      });
     });
     describe('availability loader', function() {
-      it('works when the the availability isn\'t calculated', function() {});
+      it('works when the the availability is being loaded', function() {
+        // already tested
+      });
+      it('not works when the the availability is calculated', function(done) {
+        scope.calculatingAvailability = true;
+        scope.calculateAvailability().then(function(){
+          expect(scope.calculatingAvailability).toBeFalsy();
+          done();
+        });
+      });
     });
   });
 
   describe('agenda', function() {
-    it('just appears when the availability is ', function() {
-
-    });
+    xit('just appears when the availability is ', function() {});
 
     describe('dayLines', function() {
       it('shows 15 from now', function() {});

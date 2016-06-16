@@ -2,7 +2,18 @@ angular.module('app',[])
 
 .controller('appController', ['$scope','$http',function($scope,$http){
   $scope.locationInput =  '';
-  $scope.agendaIsLoading = false;
+  $scope.calculatingAvailability = false;
+  $scope.downloadingAgenda = true;
+
+  $scope.donwnloadAgenda = function(){
+    return new Promise(function(resolve, reject){
+      $http.get('/agenda').then(function(data){
+        resolve();
+      }).then(function(){
+        $scope.downloadingAgenda = false;
+      });
+    });
+  };
 
   $scope.selectAddress = function(address){
     $scope.suggestions = [];
@@ -12,9 +23,12 @@ angular.module('app',[])
 
   $scope.calculateAvailability = function(){
     return new Promise(function (resolve, reject) {
-      $scope.agendaIsLoading = true;
+      $scope.calculatingAvailability = true;
       $scope.$apply();
       resolve();
+    }).then(function(){
+      $scope.calculatingAvailability = false;
+      $scope.$apply();
     });
   };
 
@@ -27,8 +41,9 @@ angular.module('app',[])
           input:$scope.locationInput
         }
       }).then(function(response){
-        var predictions = response.data.predictions;
         $scope.suggestions = [];
+
+        var predictions = response.data.predictions;
 
         predictions.forEach(function(content, index){
           $scope.suggestions[index] = content.description;
