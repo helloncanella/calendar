@@ -75,14 +75,12 @@ describe('Scheduling class', function() {
       });
 
 
-      it('set chosen address', function(done) {
+      it('set chosen address', function() {
         expect(scope.chosenAddress).toBe(address);
-        done();
       });
 
-      it('it disapears', function(done) {
+      it('it disapears', function() {
         expect(scope.suggestions.length).toBe(0);
-        done();
       });
 
       it('it triggers the agenda loading', function(done) {
@@ -103,7 +101,9 @@ describe('Scheduling class', function() {
   });
 
   describe('agenda', function() {
-    it('just appears when the address is chose', function() {});
+    it('just appears when the availability is ', function() {
+
+    });
 
     describe('dayLines', function() {
       it('shows 15 from now', function() {});
