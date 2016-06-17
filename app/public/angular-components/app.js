@@ -5,6 +5,27 @@ angular.module('app',[])
   $scope.calculatingAvailability = false;
   $scope.downloadingAgenda = true;
 
+
+  $scope.setDaysRow = function (numberOfDays) {
+    
+    if(!numberOfDays){
+      numberOfDays = 14;
+    }
+
+    $scope.days = [];
+    var now = new Date();
+
+    var today = {
+      year: now.getFullYear(),
+      month: now.getMonth(),
+      day: now.getUTCDate()
+    };
+
+    for(var i = 0; i<numberOfDays; i++){
+      $scope.days.push(new Date(today.year, today.month, today.day+i).toString());
+    }
+  };
+
   $scope.donwnloadAgenda = function(){
     return new Promise(function(resolve, reject){
       $http.get('/agenda').then(function(data){
@@ -28,6 +49,7 @@ angular.module('app',[])
       resolve();
     }).then(function(){
       $scope.calculatingAvailability = false;
+      $scope.setDaysRow();
       $scope.$apply();
     });
   };

@@ -133,11 +133,50 @@ describe('Scheduling class', function() {
   describe('agenda', function() {
     xit('just appears when the availability is ', function() {});
 
-    describe('dayLines', function() {
-      it('shows 15 from now', function() {});
+    describe('days row', function() {
+
+      it('is just calculated when the availability is ready', function(done){
+        spyOn(scope, 'setDaysRow').and.callThrough();
+
+        scope.calculateAvailability().then(function(){
+          expect(scope.setDaysRow).toHaveBeenCalled();
+          done();
+        });
+      });
+
+      describe('calculation', function(){
+        var numberOfDays;
+
+        beforeEach(function(){
+          scope.setDaysRow();
+        });
+
+        describe('by default', function(){
+          it('shows 14 days', function() {
+            expect(scope.days.length).toBe(14);
+          });
+
+          it('shows 14 subsequents days', function(){
+            var days = scope.days;
+
+            var period = Math.round((new Date(days[days.length-1]).getTime() - new Date(days[0]).getTime())/(1000*3600*24))+1;
+
+            expect(period).toBe(14);
+          });
+        });
+      });
 
       describe('day', function() {
-        it('when clicked, show row of respective availability', function() {});
+
+        describe('when clicked', function(){
+
+        });
+
+        it('show row of respective availability', function() {
+
+          // var downloadedCalendar =
+
+        });
       });
     });
     describe('availability row', function() {
