@@ -2,7 +2,9 @@ function Calendar(dayInformation) {
   this.dayInformation = dayInformation;
 }
 
-Calendar.prototype.getGoogleCalendarData = function(url) {
+Calendar.prototype.getGoogleData = function(url) {
+
+  console.log('aqui'); 
 
   return new Promise(function(resolve, reject) {
     var xhttp = new XMLHttpRequest();

@@ -8,11 +8,15 @@ describe('Scheduling class', function() {
   beforeEach(module('app'));
 
 
-  beforeEach(inject(function($controller, $rootScope, $window,$httpBackend) {
+  beforeEach(inject(function($controller, $rootScope, $window,$httpBackend, Library) {
     http = $httpBackend;
     scope = $rootScope.$new();
-    ctrl = $controller('appController', {$scope: scope});
+    ctrl = $controller('appController', {$scope: scope, Library: Library});
     window = $window;
+
+    // http.when('GET','/google/calendar').respond(200,{items:[]})
+    http.when('GET','/google/calendar').respond(200,'{"items":[]}');
+
   }));
 
   describe('address finder', function() {
@@ -100,32 +104,15 @@ describe('Scheduling class', function() {
     });
   });
 
-  describe('load spinner', function() {
-    describe('agenda loader', function() {
-      it('works when the the calendar events isn\'t downloaded', function() {
-        expect(scope.downloadingAgenda).toBeTruthy();
-      });
-      it('stops when the the calendar events is downloaded', function(done) {
-        http.when('GET','/agenda').respond(200,'{"items":[]}');
-
-        scope.donwnloadAgenda().then(function() {
-          expect(scope.downloadingAgenda).toBeFalsy();
-          done();
-        });
-
-        http.flush();
-      });
+  describe('availability loader', function() {
+    it('works when the the availability is being loaded', function() {
+      // already tested
     });
-    describe('availability loader', function() {
-      it('works when the the availability is being loaded', function() {
-        // already tested
-      });
-      it('not works when the the availability is calculated', function(done) {
-        scope.calculatingAvailability = true;
-        scope.calculateAvailability().then(function(){
-          expect(scope.calculatingAvailability).toBeFalsy();
-          done();
-        });
+    it('not works when the the availability is calculated', function(done) {
+      scope.calculatingAvailability = true;
+      scope.calculateAvailability().then(function(){
+        expect(scope.calculatingAvailability).toBeFalsy();
+        done();
       });
     });
   });
@@ -133,7 +120,16 @@ describe('Scheduling class', function() {
   describe('agenda', function() {
     xit('just appears when the availability is ', function() {});
 
-    describe('days row', function() {
+    it('download events (google calendar)', function(){
+      http.expectGET('/google/calendar');
+      scope.calculateAvailability();
+      http.flush();
+    });
+
+
+
+
+    xdescribe('days row', function() {
 
       it('is just calculated when the availability is ready', function(done){
         spyOn(scope, 'setDaysRow').and.callThrough();

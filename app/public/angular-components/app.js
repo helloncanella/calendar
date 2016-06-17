@@ -1,13 +1,19 @@
 angular.module('app',[])
 
-.controller('appController', ['$scope','$http',function($scope,$http){
+.factory('Library', ['$window',function($window){
+  return{
+    calendar: $window.Calendar,
+    dayInformation: $window.dayInformation
+  };
+}])
+
+.controller('appController', ['$scope','$http', 'Library', function($scope,$http,Library){
   $scope.locationInput =  '';
   $scope.calculatingAvailability = false;
-  $scope.downloadingAgenda = true;
 
 
   $scope.setDaysRow = function (numberOfDays) {
-    
+
     if(!numberOfDays){
       numberOfDays = 14;
     }
@@ -26,15 +32,15 @@ angular.module('app',[])
     }
   };
 
-  $scope.donwnloadAgenda = function(){
-    return new Promise(function(resolve, reject){
-      $http.get('/agenda').then(function(data){
-        resolve();
-      }).then(function(){
-        $scope.downloadingAgenda = false;
-      });
-    });
-  };
+  // $scope.donwnloadAgenda = function(){
+  //   return new Promise(function(resolve, reject){
+  //     $http.get('/agenda').then(function(data){
+  //       resolve();
+  //     }).then(function(){
+  //       $scope.downloadingAgenda = false;
+  //     });
+  //   });
+  // };
 
   $scope.selectAddress = function(address){
     $scope.suggestions = [];
@@ -45,8 +51,13 @@ angular.module('app',[])
   $scope.calculateAvailability = function(){
     return new Promise(function (resolve, reject) {
       $scope.calculatingAvailability = true;
-      $scope.$apply();
-      resolve();
+
+      var calendar = new Library.calendar(Library.dayInformation);
+      calendar.getGoogleData().then(function(){
+        $scope.$apply();
+        resolve();
+      });
+
     }).then(function(){
       $scope.calculatingAvailability = false;
       $scope.setDaysRow();
